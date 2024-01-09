@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>我們自行開發的Web應用程式</h1>
+    <h2> 這是打天氣資訊網站串接API接口所獲得的天氣概況</h2>
+    <input type="text" id="name" name="name" required minlength="4" maxlength="100" size="200" />
+
+
+
+<script>
+
+input_area =  document.getElementById("name")  
+
+fetch("https://api.openweathermap.org/data/2.5/weather?lat=25.0866&lon=121.5655&appid=35089f4622d3be05627cd6113d9c3936")
+.then((x) => x.text())
+// .then(data => console.log(data))
+.then(data =>input_area.value = data)
+
+
+</script>
+
+
+</body>
+</html>

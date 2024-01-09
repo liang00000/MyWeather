@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天氣資訊</title>
+    <style>
+        .card {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <label for="latitude">緯度：</label>
+    <input type="text" id="latitude" placeholder="請輸入緯度">
+    <label for="longitude">經度：</label>
+    <input type="text" id="longitude" placeholder="請輸入經度">
+    <button onclick="getWeather()">取得天氣資訊</button>
+
+    <div class="card" id="weatherCard">
+        <h1>天氣資訊</h1>
+        <label>氣溫：</label><span id="temperature"></span><br>
+        <label>風速：</label><span id="windSpeed"></span><br>
+        <label>氣壓：</label><span id="pressure"></span><br>
+        <label>日出時間：</label><span id="sunrise"></span><br>
+        <label>日落時間：</label><span id="sunset"></span><br>
+    </div>
+
+    <script>
+        function getWeather() {
+            const latitude = document.getElementById("latitude").value;
+            const longitude = document.getElementById("longitude").value;
+            const apiURL = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=35089f4622d3be05627cd6113d9c3936`;
+
+            fetch(apiURL)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("temperature").textContent = (data.main.temp - 273.15).toFixed(2) + "°C";
+                    document.getElementById("windSpeed").textContent = data.wind.speed + " m/s";
+                    document.getElementById("pressure").textContent = data.main.pressure + " hPa";
+
+                    const sunriseTimestamp = data.sys.sunrise * 1000;
+                    const sunsetTimestamp = data.sys.sunset * 1000;
+                    const sunriseDate = new Date(sunriseTimestamp);
+                    const sunsetDate = new Date(sunsetTimestamp);
+
+                    document.getElementById("sunrise").textContent = sunriseDate.toLocaleTimeString();
+                    document.getElementById("sunset").textContent = sunsetDate.toLocaleTimeString();
+
+                    // 顯示卡片
+                    document.getElementById("weatherCard").style.display = "block";
+                })
+                .catch(error => {
+                    console.error("Error fetching weather data: ", error);
+                });
+        }
+    </script>
+</body>
+
+</html>
